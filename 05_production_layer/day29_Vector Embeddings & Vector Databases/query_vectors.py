@@ -11,7 +11,7 @@ chroma_client = chromadb.PersistentClient(path="./chroma_storage")
 sentence_transformer_ef = embedding_functions.SentenceTransformerEmbeddingFunction(model_name="all-MiniLM-L6-v2")
 
 #create database
-collection = chroma_client.create_collection(
+collection = chroma_client.get_or_create_collection(
     name="my_docs",
     embedding_function=sentence_transformer_ef
 )
