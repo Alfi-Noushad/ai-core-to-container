@@ -1,0 +1,44 @@
+#sample of Continuous Integration (CI).
+#Once you upload your project folder to GitHub, this automation script acts as a silent guardian
+
+
+
+
+# 1. The name of the automation pipeline visible on your GitHub dashboard
+name: Production Microservice Verification Pipeline
+
+# 2. Define the exact events that trigger this pipeline to run automatically
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main ]
+
+# 3. Define the sequential list of execution steps (Jobs) to complete
+jobs:
+  code-quality-test:
+    # Tell GitHub to run this automation inside an isolated, cloud-hosted Ubuntu Linux server
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step A: Download a fresh copy of your repository code onto the cloud machine
+    - name: Pull Source Code Workspace
+      uses: actions/checkout@v4
+
+    # Step B: Install and configure a stable Python environment on the runner
+    - name: Configure Cloud Python Runtime
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    # Step C: Install the dependencies listed in your requirements text file
+    - name: Install System Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    # Step D: Test compile the FastAPI application code to catch any hidden syntax crashes
+    - name: Execute Code Integrity Syntax Checks
+      run: |
+        python -m py_compile app.py
+        print("🎉 Code integrity verified successfully!")
